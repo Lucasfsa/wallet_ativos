@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('categorias', \App\Http\Controllers\Api\CategoriaController::class)->only(['index'])->middleware('auth:sanctum');
-Route::apiResource('ativos', \App\Http\Controllers\Api\AtivoController::class)->middleware('auth:sanctum');
+Route::apiResource('categorias.ativos', \App\Http\Controllers\Api\AtivoController::class)->middleware('auth:sanctum');
 Route::prefix('auth')->group(function()
     {
         Route::post('login',[\App\Http\Controllers\Auth\Api\LoginController::class, 'login']);

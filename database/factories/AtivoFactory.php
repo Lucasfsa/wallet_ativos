@@ -16,12 +16,6 @@ class AtivoFactory extends Factory
 
     public function definition()
     {
-        return [
-            'ticker' =>$this->faker->words(3, true),
-            'quantidade' => $this->faker->randomFloat(2,10,300),
-            'operacao' => $this->faker->word(3, true),
-            'cotacao_atual'=>$this->faker->randomFloat(2,10,300),
-            'total_operacao'=>$this->faker->randomFloat(2,10,300)  
-        ];
+ 
     }
 }

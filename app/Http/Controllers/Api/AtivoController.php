@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ativo;
+use App\Models\Categoria;
+use Illuminate\Support\Facades\Auth;
 
 
 class AtivoController extends Controller
@@ -32,9 +34,17 @@ class AtivoController extends Controller
      */
     public function store(Request $request)
     {
-          
-        return $this->ativo->create($request->all());
 
+       Ativo::create([
+        'ticker' => $request->ticker,
+        'quantidade'=> $request->quantidade,
+        'operacao' => $request->operacao,
+        'cotacao_atual' => $request->cotacao_atual,
+        'total_operacao' => $request->total_operacao,
+        'categoria_id' => $request->categoria_id,
+        'user_id' => $request->user_id = Auth::user()->id
+    ]);
+        return with('Cadastro realizado');
     }
 
     /**

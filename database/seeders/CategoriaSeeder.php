@@ -1,9 +1,9 @@
 <?php
 
 namespace Database\Seeders;
+use App\Models\Categoria;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class CategoriaSeeder extends Seeder
 {
@@ -14,8 +14,14 @@ class CategoriaSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('categorias')->insert([
-            'nome'=>'Renda Fixa'
-        ]);
+       $categoria =['Ação', 'Fundo Imobiliário', 'Renda Fixa']; 
+       
+       foreach ($categoria as $categorias)
+       {
+            Categoria::create([
+                'nome'=>$categorias
+            ]);
+       }
+      
     }
 }

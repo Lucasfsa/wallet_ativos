@@ -11,8 +11,4 @@ class Categoria extends Model
 
     protected $fillable = ['nome'];
 
-    public function ativos()
-    {
-        return $this->hasMany(Ativo::class);
-    }
 }

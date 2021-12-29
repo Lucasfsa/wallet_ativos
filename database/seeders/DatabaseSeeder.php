@@ -13,6 +13,5 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Categoria::factory(10)->hasAtivos(10)->create();
     }
 }

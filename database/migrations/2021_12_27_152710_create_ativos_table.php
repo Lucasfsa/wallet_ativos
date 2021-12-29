@@ -16,6 +16,7 @@ class CreateAtivosTable extends Migration
         Schema::create('ativos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('categoria_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('ticker');
             $table->string('operacao');
             $table->double('quantidade');

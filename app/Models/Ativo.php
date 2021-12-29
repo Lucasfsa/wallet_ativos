@@ -9,10 +9,6 @@ class Ativo extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['ticker', 'quantidade', 'operacao', 'cotacao_atual', 'total_operacao','categoria_id'];
-    
-    public function categoria()
-    {
-        return $this->belongsTo(Categoria::class);
-    }
+    protected $fillable = ['ticker', 'quantidade', 'operacao', 'cotacao_atual', 'total_operacao', 'categoria_id','user_id'];
+  
 }

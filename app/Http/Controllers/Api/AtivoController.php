@@ -22,8 +22,8 @@ class AtivoController extends Controller
     
     public function index()
     {
-        $ativos = Ativo::get();
-        
+
+        $ativos = Ativo::getHistorico();   
 
         return response()->json([$ativos], 200);
     }
@@ -132,7 +132,7 @@ class AtivoController extends Controller
 
         $rendaDiaria = Ativo::getDiaria($periodo);
 
-        return response()->json(['Renda total no período:R$ '.$rendaDiaria,'Período: '. $periodo], 200);
+        return response()->json(['Investimento total no período:R$ '.$rendaDiaria,'Período: '. $periodo], 200);
     }
 
     

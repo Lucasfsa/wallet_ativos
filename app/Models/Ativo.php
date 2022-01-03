@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class Ativo extends Model
 {
@@ -15,7 +17,8 @@ class Ativo extends Model
     public static function getHistorico()
     {
         $historico = DB::table('ativos')
-            ->get();
+            ->where('user_id', Auth::user()->id)
+                ->get();
         return $historico;
     }
 
@@ -23,7 +26,8 @@ class Ativo extends Model
     {
         $categoria = DB::table('ativos')
             ->where('categoria_id', $id)
-                ->get();
+                ->where('user_id', Auth::user()->id)
+                    ->get();
 
         return $categoria;
     }
@@ -32,7 +36,8 @@ class Ativo extends Model
     {
         $ticker = DB::table('ativos')
             ->where('ticker', "like", "%".$ticker."%")
-                ->get();
+                ->where('user_id', Auth::user()->id)
+                    ->get();
 
         return $ticker;
     }
@@ -41,8 +46,9 @@ class Ativo extends Model
     {
         $rendaDiaria = DB::table('ativos')
             ->whereDate('created_at', $periodo)
-                ->get()
-                    ->sum('total_operacao');
+                ->where('user_id', Auth::user()->id)
+                    ->get()
+                        ->sum('total_operacao');
 
         return $rendaDiaria;
     }
@@ -52,13 +58,16 @@ class Ativo extends Model
         $acaoCompra = DB::table('ativos')
             ->where('categoria_id', '1')
                 ->where('operacao','compra')
-                    ->get()->sum('total_operacao');
+                    ->where('user_id', Auth::user()->id)
+                        ->get()
+                            ->sum('total_operacao');
 
         $acaoTotal = $acaoCompra - DB::table('ativos')
             ->where('categoria_id', '1')
                 ->where('operacao','venda')
-                    ->get()
-                        ->sum('total_operacao');
+                    ->where('user_id', Auth::user()->id)
+                        ->get()
+                            ->sum('total_operacao');
 
         return $acaoTotal;
     }
@@ -68,14 +77,16 @@ class Ativo extends Model
         $fundoCompra = DB::table('ativos')
             ->where('categoria_id', '2')
                 ->where('operacao','compra')
-                    ->get()->
-                        sum('total_operacao');
+                    ->where('user_id', Auth::user()->id)
+                        ->get()->
+                            sum('total_operacao');
 
         $fundoTotal = $fundoCompra - DB::table('ativos')
             ->where('categoria_id', '1')
                 ->where('operacao','venda')
-                    ->get()
-                        ->sum('total_operacao');  
+                    ->where('user_id', Auth::user()->id)
+                        ->get()
+                            ->sum('total_operacao');  
 
         return $fundoTotal;
     }
@@ -85,13 +96,16 @@ class Ativo extends Model
          $rendaCompra = DB::table('ativos')
             ->where('categoria_id', '3')
                 ->where('operacao','compra')
-                    ->get()->sum('total_operacao');
+                    ->where('user_id', Auth::user()->id)
+                        ->get()
+                            ->sum('total_operacao');
 
         $rendaTotal = $rendaCompra - DB::table('ativos')
             ->where('categoria_id', '3')
                 ->where('operacao','venda')
-                    ->get()
-                        ->sum('total_operacao');
+                    ->where('user_id', Auth::user()->id)
+                        ->get()
+                            ->sum('total_operacao');
 
         return $rendaTotal;
     }

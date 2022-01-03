@@ -30,13 +30,4 @@ class AtivoTest extends TestCase
        $this->assertEquals(0, count($compare));
     }
 
-   /* public function testVerificarHistorico()
-    {
-        $id = 2;
-        $teste = Ativo::getCategoria($id);
-
-        $this->assertNull($teste, a)
-
-        
-    }*/
 }

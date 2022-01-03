@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ativo;
-use App\Models\Categoria;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
 
 class AtivoController extends Controller
 {
@@ -23,7 +22,10 @@ class AtivoController extends Controller
     
     public function index()
     {
-        return $this->ativo->paginate(10);
+        $ativos = Ativo::get();
+        
+
+        return response()->json([$ativos], 200);
     }
 
     /**
@@ -34,7 +36,6 @@ class AtivoController extends Controller
      */
     public function store(Request $request)
     {
-
        Ativo::create([
         'ticker' => $request->ticker,
         'quantidade'=> $request->quantidade,
@@ -42,9 +43,9 @@ class AtivoController extends Controller
         'cotacao_atual' => $request->cotacao_atual,
         'total_operacao' => $request->total_operacao,
         'categoria_id' => $request->categoria_id,
-        'user_id' => $request->user_id = Auth::user()->id
-    ]);
-        return with('Cadastro realizado');
+        'user_id' => $request->user_id = Auth::user()->id]);
+        
+        return response()->json(["message"=>"Movimentação de ativo criada!"],200);
     }
 
     /**
@@ -55,7 +56,7 @@ class AtivoController extends Controller
      */
     public function show(Ativo $ativo)
     {
-        return $ativo;
+        return response()->json([$ativo], 200);
     }
 
     /**
@@ -65,9 +66,11 @@ class AtivoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Ativo $ativo)
     {
-        //
+        $ativo->update($request->all());
+
+        return response()->json([$ativo],200);
     }
 
     /**
@@ -76,8 +79,61 @@ class AtivoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Ativo $ativo)
     {
-        //
+        $ativo->delete();
+
+        return response()->json(["message", 'Movimentação excluída'], 200);
     }
+
+    public function porHistorico()
+    {    
+        $ativoHistorico = Ativo::getHistorico();
+
+        return response()->json([$ativoHistorico], 200);
+    }     
+
+    public function porCategoria($id)
+    {
+       $ativoCategoria = Ativo::getCategoria($id);
+
+        return response()->json([$ativoCategoria], 200);
+    }
+
+    public function porTicker($ticker)
+    {
+       $ativoTicker = Ativo::getTicker($ticker);
+
+        return response()->json([$ativoTicker], 200);
+
+    }
+
+    public function distribuicaoCarteira()
+    {   
+        
+        $acaoTotal = Ativo::getTotalAcao();
+        $fundoTotal = Ativo::getTotalFundo();    
+        $rendaTotal = Ativo::getTotalRenda();  
+             
+        $totalCarteira = $rendaTotal+$fundoTotal+$acaoTotal;
+        
+        $acao = number_format(($acaoTotal*100)/$totalCarteira, 2, '.','.');
+        $fundo = number_format(($fundoTotal*100)/$totalCarteira, 2, '.','.');
+        $renda = number_format(($rendaTotal*100)/$totalCarteira, 2, '.','.');
+
+        $porcentagemCarteira = ['Ações: '.$acao.'%', 'Fundo Imobiliário: '.$fundo.'%', 'Renda Fixa: '.$renda.'%'];
+        $total = [ 'Total ação:R$ '.$acaoTotal,  'Total Fundo Imobiliário:R$ '.$fundoTotal ,  'Renda Fixa:R$ '.$rendaTotal];
+        
+        return response()->json([$porcentagemCarteira, $total], 200);
+
+    }
+
+    public function ditribuicaoDiaria($periodo){
+
+        $rendaDiaria = Ativo::getDiaria($periodo);
+
+        return response()->json(['Renda total no período:R$ '.$rendaDiaria,'Período: '. $periodo], 200);
+    }
+
+    
 }
